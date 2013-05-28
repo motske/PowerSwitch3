@@ -1,0 +1,16 @@
+# Strings for PowerSwitchII
+
+PLUGIN_POWERSWITCHII_MODULE_NAME
+	EN	Power Switch II
+
+PLUGIN_POWERSWITCHII_PRESS_PLAY
+	EN	Press play to toggle state
+
+PLUGIN_POWERSWITCHII_DISABLED
+	EN	Power Switch II is disabled
+
+PLUGIN_POWERSWITCHII_ENABLED
+	EN	Power Switch II is enabled
+
+PLUGIN_POWERSWITCHII_AMPSWITCH
+	EN	Power Switch II (AmpSwitch compatible)

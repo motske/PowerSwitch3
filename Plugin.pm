@@ -171,6 +171,8 @@ sub commandCallback {
 
 	$log->debug( "*** PowerSwitchII: commandCallback() p0: " . $request->{'_request'}[0] . "\n");
 	$log->debug( "*** PowerSwitchII: commandCallback() p1: " . $request->{'_request'}[1] . "\n");
+	$log->debug( "*** PowerSwitchII: commandCallback() client name: " . $client->name() . "\n");
+	$log->debug( "*** PowerSwitchII: commandCallback() client class: " . ref($client) . "\n");
 
 	# Do nothing if client is not defined
 	if( !defined( $client)) {
@@ -178,7 +180,7 @@ sub commandCallback {
 	}
 
 	# Do nothing if client is not a Transporter or Squeezebox
-	if( !($client->isa( "Slim::Player::Transporter")) && !($client->isa( "Slim::Player::Squeezebox2"))) {
+	if( !($client->isa( "Slim::Player::Transporter")) && !($client->isa( "Slim::Player::Squeezebox2")) && !($client->name() =~ /pogo/)) {
 		return;
 	}
 

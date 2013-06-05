@@ -189,8 +189,7 @@ sub commandCallback {
     # Hang on to a reference to a device which is IR capable.
     if($client->isa( "Slim::Player::Transporter") || $client->isa( "Slim::Player::Squeezebox2")) {
         $irCapableClient = $client;
-        #my $PowerSwitchEnabled = $prefs->client($client)->get( 'enabled');
-        my $PowerSwitchEnabled = 1;
+        my $PowerSwitchEnabled = $prefs->client($client)->get( 'enabled');
         
 	    # Do nothing if power switch is disabled for the IR capable device
 	    if( !defined( $PowerSwitchEnabled) || $PowerSwitchEnabled == 0) {

@@ -160,6 +160,8 @@ sub getSelectedChoiceInitialValue {
 
 # Actual power state (needed for internal tracking)
 my %iOldPowerState;
+my $irCapableClient;
+my $currentSwitchState = 0;
 
 # ----------------------------------------------------------------------------
 # Callback to get client power state changes
@@ -179,18 +181,23 @@ sub commandCallback {
 		return;
 	}
 
-	# Do nothing if client is not a Transporter or Squeezebox
-	if( !($client->isa( "Slim::Player::Transporter")) && !($client->isa( "Slim::Player::Squeezebox2")) && !($client->name() =~ /pogo/)) {
-		return;
-	}
+    # Do nothing if client is not a Transporter or Squeezebox
+    if( !($client->isa( "Slim::Player::Transporter")) && !($client->isa( "Slim::Player::Squeezebox2")) && !($client->name() =~ /pogo/)) {
+        return;
+    }
 
-	my $PowerSwitchEnabled = $prefs->client($client)->get( 'enabled');
-
-	# Do nothing if power switch is disabled for this client
-	if( !defined( $PowerSwitchEnabled) || $PowerSwitchEnabled == 0) {
-		&handlePowerOff( $client);
-		return;
-	}
+    # Hang on to a reference to a device which is IR capable.
+    if($client->isa( "Slim::Player::Transporter") || $client->isa( "Slim::Player::Squeezebox2")) {
+        $irCapableClient = $client;
+        #my $PowerSwitchEnabled = $prefs->client($client)->get( 'enabled');
+        my $PowerSwitchEnabled = 1;
+        
+	    # Do nothing if power switch is disabled for the IR capable device
+	    if( !defined( $PowerSwitchEnabled) || $PowerSwitchEnabled == 0) {
+	        &handlePowerOff( $client);
+	        return;
+	    }                
+    }
 
 	# Get power on and off commands
 	# Sometimes we do get only a power command, sometimes only a play/pause command and sometimes both
@@ -208,16 +215,25 @@ sub commandCallback {
 
 			if( $iPower == 1) {
 				# If player is turned on within delay, kill delayed power off timer
-				Slim::Utils::Timers::killTimers( $client, \&handlePowerOff); 
+				Slim::Utils::Timers::killTimers( $irCapableClient, \&handlePowerOff); 
 
 				# Set timer to power on amplifier after a delay
-				Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + $gPowerOnDelay), \&handlePowerOn); 
+				Slim::Utils::Timers::setTimer( $irCapableClient, (Time::HiRes::time() + $gPowerOnDelay), \&handlePowerOn); 
 			} else {
+				# Make sure there aren't any other devices on needing the switch
+				foreach my $clientHashKey ( keys %iOldPowerState )
+                {
+                	if($iOldPowerState{$clientHashKey}) {
+                        $log->debug("*** PowerSwitchII: commandCallback() Client:" . $client->name() . " was powered down but another device: " . $clientHashKey . " still needs the switch powered\n");                		
+                        return;		
+                	}
+                }
+                
 				# If player is turned off within delay, kill delayed power on timer
-				Slim::Utils::Timers::killTimers( $client, \&handlePowerOn); 
+				Slim::Utils::Timers::killTimers( $irCapableClient, \&handlePowerOn); 
 
 				# Set timer to power off amplifier after a delay
-				Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + $gPowerOffDelay), \&handlePowerOff); 
+				Slim::Utils::Timers::setTimer( $irCapableClient, (Time::HiRes::time() + $gPowerOffDelay), \&handlePowerOff); 
 			}
 		}
 	# Get newclient events
@@ -237,7 +253,15 @@ sub commandCallback {
 # ----------------------------------------------------------------------------
 sub handlePowerOn {
 	my $client = shift;
-	
+
+    if($currentSwitchState) {
+    	$log->debug("*** PowerSwitchII: handlePowerOn Switch alreadyEnabled, skipping IR blast\n");
+    	return;
+    } else {
+        $currentSwitchState = 1;
+        $log->debug("*** PowerSwitchII: handlePowerOn Enabling switch\n");        
+    }
+    
 	# AmpSwitch compatibilty (do not use for new development)
 	if( $prefs->client($client)->get( 'enabled') eq 2) {
 
@@ -258,6 +282,14 @@ sub handlePowerOn {
 sub handlePowerOff {
 	my $client = shift;
 
+    if(! $currentSwitchState) {
+        $log->debug("*** PowerSwitchII: handlePowerOff Switch already powered off, skipping IR blast\n");    	
+        return;
+    } else {
+        $log->debug("*** PowerSwitchII: handlePowerOff Disabling switch\n");           	
+        $currentSwitchState = 0;
+    }
+    
 	# AmpSwitch compatibilty (do not use for new development)
 	if( ( $prefs->client($client)->get( 'enabled') eq 2) || ( $prefs->client($client)->get( 'enabled') eq 0)) {
 		# Set GeekMode(Audio)

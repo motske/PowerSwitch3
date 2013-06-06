@@ -182,8 +182,8 @@ sub commandCallback {
 	}
 
     # Do nothing if client is not a Transporter or Squeezebox
-    if( !($client->isa( "Slim::Player::Transporter")) && !($client->isa( "Slim::Player::Squeezebox2")) && !($client->name() =~ /pogo/)) {
-        return;
+    if( !($client->isa( "Slim::Player::Transporter")) && !($client->isa( "Slim::Player::Squeezebox2")) && !($client->name() =~ /~/)) {
+        return;		#"needy clients" are identified by including a "~" in their name--e.g., LivingRm~  
     }
 
     # Hang on to a reference to a device which is IR capable.

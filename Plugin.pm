@@ -1,5 +1,33 @@
-#	PowerSwitchII
+#	PowerSwitch3
 #
+#	PowerSwitch3 is Motske's modification of Felix Mueller's PowerSwitch II plugin 
+#	done in accordance with GNU General Public License v 2.0, which continues to  
+#	apply to this modified version.  Mr. Mueller's GNU notice below regarding use 
+#	and modification of this program are incorporated herein.
+#	----------------------------------------------------------------------
+#	Modification:	PowerSwitch3 extends the functionality of PowerSwitch II by
+#			allowing clients that do not have ir/geek ports to trigger an
+#			amp via the ir/geek port of a SB Classic or Transporter. E.g.,
+#			when a software client such as squeezePlay, squeezeSlave,
+#			squeezeLite is powered on, the SB Classic/Transporter ir port 
+#			will send low voltage power-on unitl soft-client is powered-off. 
+#	-----------------------------------------------------------------------
+#	Requirements:	Identify non-SB Classic/Transporter clients that will utilize
+#			amp switching by including a "~" in their name--e.g., MasterBdRoom~
+#	-----------------------------------------------------------------------
+#	Compatability:	So far, no conflicts noted with other plugins.  Specifically confirmed
+#			PowerSave plugin continues to work perfectly.
+#		
+#			Although original plugin designed for use with circuit created
+#			and displayed on Mr. Mueller's website:
+#			www.gwendesign.com/slimserver/dev_hard_and_software.htm
+#			The circuit is not required if your amp/preamp or powerstrip
+#			will accept a low watt trigger--e.g., ~3.5 volts instead of usual 12v
+#			Confirmed works with Belkin PureAV PF60
+#	------------------------------------------------------------------------
+#
+#
+#	Original Author's Comments:
 #	Author: Felix Mueller <felix(dot)mueller(at)gwendesign(dot)com>
 #
 #	Copyright (c) 2003-2007 GWENDESIGN
@@ -25,6 +53,7 @@
 #	----------------------------------------------------------------------
 #	History:
 #
+#	2013/06/06 	- PowerSwitch3 Modification by Motske
 #	2008/10/20 v0.4 - Fix for SC 7.x
 #	2008/01/23 v0.3 - Fix headphone out if not used for switching
 #			  (i.e. make sure to enable audio if not in use)

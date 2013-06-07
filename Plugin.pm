@@ -1,6 +1,6 @@
 #	PowerSwitch3
 #
-#	PowerSwitch3 is Motske's modification of Felix Mueller's PowerSwitch II plugin 
+#	PowerSwitch3 is Kevin Motschiedler's modification of Felix Mueller's PowerSwitch II plugin 
 #	done in accordance with GNU General Public License v 2.0, which continues to  
 #	apply to this modified version.  Mr. Mueller's GNU notice below regarding use 
 #	and modification of this program are incorporated herein.
@@ -48,12 +48,12 @@
 #	Installation:
 #			- Copy the complete directory into the 'Plugins' directory
 #			- Restart SlimServer
-#			- Enable PowerSwitchII in the player interface
+#			- Enable PowerSwitchIII in the player interface
 #			- Optional: set the $gPowerOffDelay / $powerOnDelay in this file
 #	----------------------------------------------------------------------
 #	History:
 #
-#	2013/06/06 	- PowerSwitch3 Modification by Motske
+#	2013/06/06 	- PowerSwitch3 Modification by Kevin Motschiedler
 #	2008/10/20 v0.4 - Fix for SC 7.x
 #	2008/01/23 v0.3 - Fix headphone out if not used for switching
 #			  (i.e. make sure to enable audio if not in use)
@@ -81,7 +81,7 @@
 #	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
 #	02111-1307 USA
 #
-package Plugins::PowerSwitchII::Plugin;
+package Plugins::PowerSwitchIII::Plugin;
 use base qw(Slim::Plugin::Base);
 use strict;
 
@@ -95,33 +95,33 @@ use Slim::Utils::Prefs;
 my $gPowerOnDelay	= 0;	# Delay to turn on amplifier after player has been turned on (in seconds)
 my $gPowerOffDelay	= 0;	# Delay to turn off amplifier after player has been turned off (in seconds)
 
-my @powerswitchii_choice = ();
+my @PowerSwitchIII_choice = ();
 
 # ----------------------------------------------------------------------------
 my $log = Slim::Utils::Log->addLogCategory({
-	'category'     => 'plugin.powerswitchii',
+	'category'     => 'plugin.PowerSwitchIII',
 	'defaultLevel' => 'OFF',
-	'description'  => 'PLUGIN_POWERSWITCHII_MODULE_NAME',
+	'description'  => 'PLUGIN_PowerSwitchIII_MODULE_NAME',
 });
 
 # ----------------------------------------------------------------------------
-my $prefs = preferences('plugin.powerswitchii');
+my $prefs = preferences('plugin.PowerSwitchIII');
 
 # ----------------------------------------------------------------------------
 sub initPlugin {
 	my $class = shift;
 
-	@powerswitchii_choice = (
+	@PowerSwitchIII_choice = (
 		{
-			'name'  => '{PLUGIN_POWERSWITCHII_DISABLED}',
+			'name'  => '{PLUGIN_PowerSwitchIII_DISABLED}',
 			'value' => 0,
 		},
 		{
-			'name'  => '{PLUGIN_POWERSWITCHII_ENABLED}',
+			'name'  => '{PLUGIN_PowerSwitchIII_ENABLED}',
 			'value' => 1,
 		},
 		{
-			'name'  => '{PLUGIN_POWERSWITCHII_AMPSWITCH}',
+			'name'  => '{PLUGIN_PowerSwitchIII_AMPSWITCH}',
 			'value' => 2,
 		},
 	);
@@ -134,7 +134,7 @@ sub initPlugin {
 
 # ----------------------------------------------------------------------------
 sub getDisplayName() {
-	return( 'PLUGIN_POWERSWITCHII_MODULE_NAME');
+	return( 'PLUGIN_PowerSwitchIII_MODULE_NAME');
 }
 
 # ----------------------------------------------------------------------------
@@ -150,9 +150,9 @@ sub setMode {
 
 	# use INPUT.Choice
 	my %params = (
-		'header'       => '{PLUGIN_POWERSWITCHII_MODULE_NAME} {count}',
-		'listRef'      => \@powerswitchii_choice,
-		'modeName'     => 'PowerSwitchIIChoice',
+		'header'       => '{PLUGIN_PowerSwitchIII_MODULE_NAME} {count}',
+		'listRef'      => \@PowerSwitchIII_choice,
+		'modeName'     => 'PowerSwitchIIIChoice',
 		'overlayRef'   => \&getSelectedChoiceOverlay,
 		'onRight'      => \&setSelectedChoice,
 		'initialValue' => \&getSelectedChoiceInitialValue,
@@ -200,27 +200,27 @@ sub commandCallback {
 
 	my $client = $request->client();
 
-	$log->debug( "*** PowerSwitchII: commandCallback() p0: " . $request->{'_request'}[0] . "\n");
-	$log->debug( "*** PowerSwitchII: commandCallback() p1: " . $request->{'_request'}[1] . "\n");
-	$log->debug( "*** PowerSwitchII: commandCallback() client name: " . $client->name() . "\n");
-	$log->debug( "*** PowerSwitchII: commandCallback() client class: " . ref($client) . "\n");
+	$log->debug( "*** PowerSwitchIII: commandCallback() p0: " . $request->{'_request'}[0] . "\n");
+	$log->debug( "*** PowerSwitchIII: commandCallback() p1: " . $request->{'_request'}[1] . "\n");
+	$log->debug( "*** PowerSwitchIII: commandCallback() client name: " . $client->name() . "\n");
+	$log->debug( "*** PowerSwitchIII: commandCallback() client class: " . ref($client) . "\n");
 
 	# Do nothing if client is not defined
 	if( !defined( $client)) {
 		return;
 	}
 
-    # Do nothing if client is not a Transporter or Squeezebox
-    if( !($client->isa( "Slim::Player::Transporter")) && !($client->isa( "Slim::Player::Squeezebox2")) && !($client->name() =~ /~/)) {
+    # Do nothing if client is not a Transporter, Squeezebox2 or greedy client
+    if( !($client->isa( "Slim::Player::Transporter")) && !(ref $client eq "Slim::Player::Squeezebox2") && !($client->name() =~ /~/)) {
         return;		#"needy clients" are identified by including a "~" in their name--e.g., LivingRm~  
     }
 
     # Hang on to a reference to a device which is IR capable.
     if($client->isa( "Slim::Player::Transporter") || ref $client eq "Slim::Player::Squeezebox2") {
-    	$log->debug( "*** PowerSwitchII: commandCallback() found IR capable client: " . $client->name() . "\n");
+    	$log->debug( "*** PowerSwitchIII: commandCallback() found IR capable client: " . $client->name() . "\n");
         $irCapableClient = $client;
         my $PowerSwitchEnabled = $prefs->client($client)->get( 'enabled');
-        $log->debug( "*** PowerSwitchII: commandCallback() power switch enabled is: " . $PowerSwitchEnabled . "\n");
+        $log->debug( "*** PowerSwitchIII: commandCallback() power switch enabled is: " . $PowerSwitchEnabled . "\n");
         
 	    # Do nothing if power switch is disabled for the IR capable device
 	    if( !defined( $PowerSwitchEnabled) || $PowerSwitchEnabled == 0) {
@@ -241,7 +241,7 @@ sub commandCallback {
 		if( $iOldPowerState{$client} ne $iPower) {
 			$iOldPowerState{$client} = $iPower;
 
-			$log->debug("*** PowerSwitchII: commandCallback() Power: $iPower\n");
+			$log->debug("*** PowerSwitchIII: commandCallback() Power: $iPower\n");
 
 			if( $iPower == 1) {
 				# If player is turned on within delay, kill delayed power off timer
@@ -254,7 +254,7 @@ sub commandCallback {
 				foreach my $clientHashKey ( keys %iOldPowerState )
                 {
                 	if($iOldPowerState{$clientHashKey}) {
-                        $log->debug("*** PowerSwitchII: commandCallback() Client:" . $client->name() . " was powered down but another device: " . $clientHashKey . " still needs the switch powered\n");                		
+                        $log->debug("*** PowerSwitchIII: commandCallback() Client:" . $client->name() . " was powered down but another device: " . $clientHashKey . " still needs the switch powered\n");                		
                         return;		
                 	}
                 }
@@ -271,7 +271,7 @@ sub commandCallback {
 	      || $request->isCommand([['client'], ['reconnect']])) {
 		my $subCmd = $request->{'_request'}[1];
 	
-		$log->debug("*** PowerSwitchII: commandCallback() client: $subCmd\n");
+		$log->debug("*** PowerSwitchIII: commandCallback() client: $subCmd\n");
 
 		# Get current power state (needed for internal tracking)
 		if( !defined( $iOldPowerState{$client})) {
@@ -285,11 +285,11 @@ sub handlePowerOn {
 	my $client = shift;
 
     if($currentSwitchState) {
-    	$log->debug("*** PowerSwitchII: handlePowerOn Switch alreadyEnabled, skipping IR blast\n");
+    	$log->debug("*** PowerSwitchIII: handlePowerOn Switch alreadyEnabled, skipping IR blast\n");
     	return;
     } else {
         $currentSwitchState = 1;
-        $log->debug("*** PowerSwitchII: handlePowerOn Enabling switch\n");        
+        $log->debug("*** PowerSwitchIII: handlePowerOn Enabling switch\n");        
     }
     
 	# AmpSwitch compatibilty (do not use for new development)
@@ -313,10 +313,10 @@ sub handlePowerOff {
 	my $client = shift;
 
     if(! $currentSwitchState) {
-        $log->debug("*** PowerSwitchII: handlePowerOff Switch already powered off, skipping IR blast\n");    	
+        $log->debug("*** PowerSwitchIII: handlePowerOff Switch already powered off, skipping IR blast\n");    	
         return;
     } else {
-        $log->debug("*** PowerSwitchII: handlePowerOff Disabling switch\n");           	
+        $log->debug("*** PowerSwitchIII: handlePowerOff Disabling switch\n");           	
         $currentSwitchState = 0;
     }
     

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <extension>
-	<id>663969E4-9824-4764-AF9C-BB55797048D2</id>
+	<id>fc43fd60-cfe9-11e2-8b8b-0800200c9a66</id>
 	<name>PLUGIN_POWERSWITCHIII_MODULE_NAME</name>
 	<module>Plugins::PowerSwitchIII::Plugin</module>
 	<version>0.1</version>

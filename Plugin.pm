@@ -99,13 +99,13 @@ my @PowerSwitchIII_choice = ();
 
 # ----------------------------------------------------------------------------
 my $log = Slim::Utils::Log->addLogCategory({
-	'category'     => 'plugin.PowerSwitchIII',
+	'category'     => 'plugin.powerswitchiii',
 	'defaultLevel' => 'OFF',
-	'description'  => 'PLUGIN_PowerSwitchIII_MODULE_NAME',
+	'description'  => 'PLUGIN_POWERSWITCHIII_MODULE_NAME',
 });
 
 # ----------------------------------------------------------------------------
-my $prefs = preferences('plugin.PowerSwitchIII');
+my $prefs = preferences('plugin.powerswitchiii');
 
 # ----------------------------------------------------------------------------
 sub initPlugin {

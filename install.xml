@@ -2,22 +2,19 @@
 
 <extension>
 	<id>663969E4-9824-4764-AF9C-BB55797048D2</id>
-        <name>PLUGIN_POWERSWITCHII_MODULE_NAME</name>
-        <module>Plugins::PowerSwitchII::Plugin</module>
-        <version>0.4</version>
-	<description>PLUGIN_POWERSWITCHII_MODULE_NAME</description>
-        <creator>GWENDESIGN</creator>
-        <email>felix.mueller@gwendesign.com</email>
-
+	<name>PLUGIN_POWERSWITCHIII_MODULE_NAME</name>
+	<module>Plugins::PowerSwitchIII::Plugin</module>
+	<version>0.1</version>
+	<description>PLUGIN_POWERSWITCHIII_MODULE_NAME</description>
+	<creator>Kevin Motschiedler/Robert Pittman</creator>
+	<email>kdmotschiedler@gmail.com</email>
 	<defaultState>enabled</defaultState>
-        
-        <homepageURL>http://www.gwendesign.com/</homepageURL>
+
+	<homepageURL>https://github.com/motske/PowerSwitch3</homepageURL>
 	<type>2</type><!-- type=extension -->
-
-        <targetApplication>
-  	        <id>SlimServer</id>
-                <minVersion>7.0a</minVersion>
-                <maxVersion>*</maxVersion>
-        </targetApplication>
-
+	<targetApplication>
+		<id>SlimServer</id>
+		<minVersion>7.0a</minVersion>
+		<maxVersion>*</maxVersion>
+	</targetApplication>
 </extension>

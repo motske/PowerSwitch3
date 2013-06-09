@@ -1,23 +1,26 @@
 # Strings for POWERSWITCHIIII
 
 PLUGIN_POWERSWITCHIII_MODULE_NAME
-	EN	Power SWITCH III
+	EN	PowerSwitch III
 
 PLUGIN_POWERSWITCHIII_PRESS_PLAY
 	EN	Press play to toggle state
 
 PLUGIN_POWERSWITCHIII_DISABLED
-	EN	Power SWITCH III is disabled
+	EN	PowerSwitch III is disabled
 
 PLUGIN_POWERSWITCHIII_ENABLED
-	EN	Power SWITCH III is enabled
+	EN	PowerSwitch III is enabled
 
 PLUGIN_POWERSWITCHIII_AMPSWITCH
-	EN	Power SWITCH III (AmpSwitch compatible)
+	EN	PowerSwitch III (AmpSwitch compatible)
 
 SETUP_PLUGIN_POWERSWITCHIII_SETTINGS
-	EN	PowerSwitch Settings
-    
+	EN	PowerSwitch III Settings
+	
+SETUP_PLUGIN_POWERSWITCHIII_DESC
+	EN	Extends functionality of PowerSwitch II so that ANY Squeeze client (software or hardware) can use IR port on SqueezeBox2 & Transporter to trigger amp (via home made relay or sensitive enough trigger inputs on amps, powerstrips, ...).  Turn on/off for SB2 and Transporter in "Extras" menu on device.  Turn on for other devices by including a "~" in their name--e.g., LivingRm~   
+
 SETUP_PLUGIN_POWERSWITCHIII_SETTINGS_DESC
 	EN	This is the list of names that powerswitch will watch
     

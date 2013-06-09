@@ -1,11 +1,11 @@
-#	PowerSwitch3
+#	PowerSwitch III
 #
-#	PowerSwitch3 is Kevin Motschiedler's modification of Felix Mueller's PowerSwitch II plugin 
-#	done in accordance with GNU General Public License v 2.0, which continues to  
+#	PowerSwitch III is Kevin Motschiedler's modification of Felix Mueller's PowerSwitch II 
+#	plugin done in accordance with GNU General Public License v 2.0, which continues to  
 #	apply to this modified version.  Mr. Mueller's GNU notice below regarding use 
 #	and modification of this program are incorporated herein.
 #	----------------------------------------------------------------------
-#	Modification:	PowerSwitch3 extends the functionality of PowerSwitch II by
+#	Modification:	PowerSwitch III extends the functionality of PowerSwitch II by
 #			allowing clients that do not have ir/geek ports to trigger an
 #			amp via the ir/geek port of a SB Classic or Transporter. E.g.,
 #			when a software client such as squeezePlay, squeezeSlave,
@@ -53,7 +53,7 @@
 #	----------------------------------------------------------------------
 #	History:
 #
-#	2013/06/06 	- PowerSwitch3 Modification by Kevin Motschiedler
+#	2013/06/06 	- PowerSwitch III Modification by Kevin Motschiedler
 #	2008/10/20 v0.4 - Fix for SC 7.x
 #	2008/01/23 v0.3 - Fix headphone out if not used for switching
 #			  (i.e. make sure to enable audio if not in use)
@@ -113,17 +113,17 @@ sub initPlugin {
 
 	@PowerSwitchIII_choice = (
 		{
-			'name'  => '{PLUGIN_PowerSwitchIII_DISABLED}',
+			'name'  => '{PLUGIN_POWERSWITCHIII_DISABLED}',
 			'value' => 0,
 		},
 		{
-			'name'  => '{PLUGIN_PowerSwitchIII_ENABLED}',
+			'name'  => '{PLUGIN_POWERSWITCHIII_ENABLED}',
 			'value' => 1,
 		},
-		{
-			'name'  => '{PLUGIN_PowerSwitchIII_AMPSWITCH}',
-			'value' => 2,
-		},
+#		{
+#			'name'  => '{PLUGIN_POWERSWITCHIII_AMPSWITCH}',
+#			'value' => 2,
+#		},
 	);
 
 	# Install callback to get client power state changes
@@ -134,7 +134,7 @@ sub initPlugin {
 
 # ----------------------------------------------------------------------------
 sub getDisplayName() {
-	return( 'PLUGIN_PowerSwitchIII_MODULE_NAME');
+	return( 'PLUGIN_POWERSWITCHIII_MODULE_NAME');
 }
 
 # ----------------------------------------------------------------------------
@@ -150,7 +150,7 @@ sub setMode {
 
 	# use INPUT.Choice
 	my %params = (
-		'header'       => '{PLUGIN_PowerSwitchIII_MODULE_NAME} {count}',
+		'header'       => '{PLUGIN_POWERSWITCHIII_MODULE_NAME} {count}',
 		'listRef'      => \@PowerSwitchIII_choice,
 		'modeName'     => 'PowerSwitchIIIChoice',
 		'overlayRef'   => \&getSelectedChoiceOverlay,
@@ -292,15 +292,15 @@ sub handlePowerOn {
         $log->debug("*** PowerSwitchIII: handlePowerOn Enabling switch\n");        
     }
     
-	# AmpSwitch compatibilty (do not use for new development)
-	if( $prefs->client($client)->get( 'enabled') eq 2) {
-
-		# Set GeekMode(Blaster)
-		my $geekmode = pack( 'C', 1);
-		$client->sendFrame( 'geek', \$geekmode);
-
-		return;
-	}
+#	# AmpSwitch compatibilty (do not use for new development)
+#	if( $prefs->client($client)->get( 'enabled') eq 2) {
+#
+#		# Set GeekMode(Blaster)
+#		my $geekmode = pack( 'C', 1);
+#		$client->sendFrame( 'geek', \$geekmode);
+#
+#		return;
+#	}
 
 	# On means: hightime = 1; lowtime = 1; modulation = 1
 	my $ircode = &IRBlastPulse( 1, 1, 1);
@@ -320,14 +320,14 @@ sub handlePowerOff {
         $currentSwitchState = 0;
     }
     
-	# AmpSwitch compatibilty (do not use for new development)
-	if( ( $prefs->client($client)->get( 'enabled') eq 2) || ( $prefs->client($client)->get( 'enabled') eq 0)) {
-		# Set GeekMode(Audio)
-		my $geekmode = pack( 'C', 0);
-		$client->sendFrame( 'geek', \$geekmode);
-
-		return;
-	}
+#	# AmpSwitch compatibilty (do not use for new development)
+#	if( ( $prefs->client($client)->get( 'enabled') eq 2) || ( $prefs->client($client)->get( 'enabled') eq 0)) {
+#		# Set GeekMode(Audio)
+#		my $geekmode = pack( 'C', 0);
+#		$client->sendFrame( 'geek', \$geekmode);
+#
+#		return;
+#	}
 	
 	# Off means: hightime = 1; lowtime = 0; modulation = 1
 	my $ircode = &IRBlastPulse( 1, 0, 1);

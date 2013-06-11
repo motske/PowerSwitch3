@@ -200,11 +200,6 @@ sub commandCallback {
 
 	my $client = $request->client();
 
-	$log->debug( "*** PowerSwitchIII: commandCallback() p0: " . $request->{'_request'}[0] . "\n");
-	$log->debug( "*** PowerSwitchIII: commandCallback() p1: " . $request->{'_request'}[1] . "\n");
-	$log->debug( "*** PowerSwitchIII: commandCallback() client name: " . $client->name() . "\n");
-	$log->debug( "*** PowerSwitchIII: commandCallback() client class: " . ref($client) . "\n");
-
 	# Do nothing if client is not defined
 	if( !defined( $client)) {
 		return;

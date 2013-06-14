@@ -12,6 +12,7 @@ The intent is to be able to use the power state of one or more squeezebox client
 Oh, yeah, as of 6/7/13 revisions, it now works!
 
 Install instructions:
+
 1.  Install files (download and unzip to Squeezebox/server/Plugins/PowerSwitchIII directory--make sure no subdirectories created within PowerSwitchIII when unzipping);
 2.  Restart SqueezeServer; 
 3.  Activate Plugin (open SqueezeServer web interface, open settings (bottom right corner), select plugins tab and check PowerSwitch III);
